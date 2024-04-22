@@ -68,7 +68,6 @@ class Login
     {
         foreach (self::$users as $user) {
             if ($this->username === $user["username"]) {
-                echo var_dump($this->hashedPassword, $user["password"]);
                 if (password_verify($this->password, $user["password"])) {
                     $this->user = $user;
                     return true;
