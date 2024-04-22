@@ -8,6 +8,12 @@ $whoops->register();
 
 $request_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
+if ($request_path === "/") {
+    if (!isset($_SESSION['login'])) {
+        header("Location: /login");
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +22,7 @@ $request_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auth</title>
+    <title>index</title>
     <link rel="stylesheet" href="/assets/styles/style-tailwind.css">
 </head>
 
@@ -25,6 +31,9 @@ $request_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         <?php
         switch ($request_path) {
             case '/':
+                header('Location: /dashboard');
+                break;
+            case '/dashboard':
                 require __DIR__ . '/dashboard.php';
                 break;
             case '/login':
@@ -34,7 +43,7 @@ $request_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
                 require __DIR__ . '/register.php';
                 break;
             default:
-                require __DIR__ . '/assets/views/404.php';
+                header('Location: /dashboard');
                 break;
         }
         ?>
