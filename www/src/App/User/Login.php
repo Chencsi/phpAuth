@@ -43,7 +43,7 @@ class Login {
     private function setSessionAndLogin(): void {
         session_start();
         $_SESSION['token'] = $this->token;
-        header("location: /dashboard")
+        header("location: /dashboard");
     }
 
     private function checkToken(string $token): bool {
