@@ -1,0 +1,29 @@
+version: '3'
+
+networks:
+  webapp:
+
+services:
+  web:
+    image: nginx:1.25-alpine3.17
+    ports:
+      - "${PORT_WEB}:80"
+    volumes:
+      - ./www:/www:rw
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./logs/nginx:/var/logs/nginx:rw
+    depends_on:
+      - app
+    networks:
+      - webapp
+
+  app:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - ./www:/www:rw
+    networks:
+      - webapp
