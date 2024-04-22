@@ -1,0 +1,14 @@
+{
+    "name": "app/src",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/App"
+        }
+    },
+    "authors": [
+        {
+            "name": "Chen Kevin"
+        }
+    ],
+    "require": {}
+}
