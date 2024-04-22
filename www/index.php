@@ -1,6 +1,7 @@
 <?php
 
 use App\User\Login;
+use App\User\Register;
 
 require __DIR__ . "/vendor/autoload.php";
 
@@ -12,6 +13,18 @@ session_start();
 
 $request_path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 $token = isset($_SESSION["token"]) ? $_SESSION["token"] : null;
+$posted_data = $_POST;
+
+if (!empty($posted_data)) {
+    switch ($request_path){
+        case ("/login"):
+            $login = new Login($posted_data["username"], $posted_data["password"]);
+            break;
+        case ("/register"):
+            $register = new Register($posted_data["username"], $posted_data["email"], $posted_data["password"]);
+            break;
+    }
+}
 
 if ($token !== null) {
     $userFromToken = Login::getUserFromToken($token);
