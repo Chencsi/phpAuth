@@ -6,16 +6,18 @@ class Register {
     private string $password;
     private string $hashedPassword;
     private string $email;
-    private string $data = "data.json";
+    private string $data = __DIR__ . "/data/data.json";
     private array $newUser;
     private array $users = [];
     public string $error = "";
     public string $success = "";
     public function __construct(string $username, string $password, string $email) {
 
-        $this->username = trim(filter_var($username, FILTER_SANITIZE_STRING), " \t\n\r\0\x0B");
-        $this->email = trim(filter_var($email, FILTER_SANITIZE_EMAIL), " \t\n\r\0\x0B");
-        $this->password = trim(filter_var($password, FILTER_SANITIZE_STRING), " \t\n\r\0\x0B");
+        $filterChars = " \t\n\r\0\x0B";
+
+        $this->username = trim(filter_var($username, FILTER_SANITIZE_STRING), $filterChars);
+        $this->email = trim(filter_var($email, FILTER_SANITIZE_EMAIL), $filterChars);
+        $this->password = trim(filter_var($password, FILTER_SANITIZE_STRING), $filterChars);
 
         $this->hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
 
@@ -24,7 +26,8 @@ class Register {
         $this->newUser = [
             "username" => $this->username,
             "email"=> $this->email,
-            "password" => $this->hashedPassword
+            "password" => $this->hashedPassword,
+            "token" => ""
         ];
 
         if ($this->checkInputValues()) {
