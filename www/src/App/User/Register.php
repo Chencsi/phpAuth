@@ -1,7 +1,8 @@
 <?php
 
-class Register {
+namespace App\User;
 
+class Register {
     private string $username;
     private string $password;
     private string $hashedPassword;
@@ -57,13 +58,11 @@ class Register {
     private function insertNewUser(): void {
         if (!$this->usernameExists()) {
             array_push($this->users, $this->newUser);
-            if (file_put_contents($this->data, json_decode($this->users, JSON_PRETTY_PRINT))) {
+            if (file_put_contents($this->data, json_encode($this->users, JSON_PRETTY_PRINT))) {
                 $this->success = "Sikeresen regisztráltál!";
-                return;
             } else {
-                return $this->error = "Valami hiba történt, próbáld úrja."
+                $this->error = "Valami hiba történt, próbáld úrja.";
             }
         }
     }
-
 }
