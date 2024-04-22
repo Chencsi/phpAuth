@@ -9,7 +9,7 @@ class Login
     private string $hashedPassword;
     private string $email;
     private string $token;
-    private string $data = __DIR__ . "/data/data.json";
+    private string $data = __DIR__ . "/../../../data/data.json";
     private static array $users = [];
     private array $user;
     public string $error = "";
@@ -19,20 +19,19 @@ class Login
 
         $filterChars = " \t\n\r\0\x0B";
 
-        $this->username = trim(filter_var($username, FILTER_SANITIZE_STRING), $filterChars);
-        $this->password = trim(filter_var($password, FILTER_SANITIZE_STRING), $filterChars);
+        $this->username = trim(htmlspecialchars($username), $filterChars);
+        $this->password = trim(htmlspecialchars($password), $filterChars);
 
         $this->hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
 
-        $this->users = json_decode(file_get_contents($this->data), true);
-
+        self::$users = json_decode(file_get_contents($this->data), true);
         if (
             $this->checkInputValues() &&
             $this->checkDataMatching() &&
             $this->user["token"] === "" &&
             $this->addTokenToUser() &&
             $this->saveUsers()
-        ) {
+            ) {
             $this->setSessionAndLogin();
         }
     }
@@ -57,7 +56,7 @@ class Login
     {
 
         $this->token = $this->generateToken();
-        foreach ($this->users as $user) {
+        foreach (self::$users as $user) {
             if ($user["username"] === $this->user["username"]) {
                 $user["token"] = $this->token;
             }
@@ -67,16 +66,17 @@ class Login
 
     private function checkDataMatching(): bool
     {
-        foreach ($this->users as $user) {
-            if ($this->username === $user->username) {
-                if (password_verify($this->hashedPassword, $user["password"])) {
+        foreach (self::$users as $user) {
+            if ($this->username === $user["username"]) {
+                echo var_dump($this->hashedPassword, $user["password"]);
+                if (password_verify($this->password, $user["password"])) {
                     $this->user = $user;
                     return true;
                 }
                 break;
             }
         }
-        $this->error = "Nem található felhasználó ezzel a jelszóval!";
+        $this->error = "Helytelen jelszó!";
         return false;
     }
 
@@ -97,7 +97,7 @@ class Login
 
     private function saveUsers(): bool
     {
-        if (file_put_contents($this->data, json_encode($this->users, JSON_PRETTY_PRINT))) {
+        if (file_put_contents($this->data, json_encode(self::$users, JSON_PRETTY_PRINT))) {
             $this->success = "Sikeres bejelentkezés!";
             return true;
         } else {

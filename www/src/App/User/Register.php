@@ -7,18 +7,18 @@ class Register {
     private string $password;
     private string $hashedPassword;
     private string $email;
-    private string $data = __DIR__ . "/data/data.json";
+    private string $data = __DIR__ . "/../../../data/data.json";
     private array $newUser;
     private array $users = [];
     public string $error = "";
     public string $success = "";
-    public function __construct(string $username, string $password, string $email) {
+    public function __construct(string $username, string $email, string $password) {
 
         $filterChars = " \t\n\r\0\x0B";
 
-        $this->username = trim(filter_var($username, FILTER_SANITIZE_STRING), $filterChars);
-        $this->email = trim(filter_var($email, FILTER_SANITIZE_EMAIL), $filterChars);
-        $this->password = trim(filter_var($password, FILTER_SANITIZE_STRING), $filterChars);
+        $this->username = trim(htmlspecialchars($username), $filterChars);
+        $this->email = trim(htmlspecialchars($email), $filterChars);
+        $this->password = trim(htmlspecialchars($password), $filterChars);
 
         $this->hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
 
@@ -36,7 +36,7 @@ class Register {
         }
 
     }
-
+    
     private function checkInputValues(): bool {
         if (empty($this->username) || empty($this->password) || empty($this->email)) {
             $this->error = "Minden mező kitöltése szükséges a regisztrációhoz.";
@@ -49,10 +49,10 @@ class Register {
         foreach($this->users as $user) {
             if ($user["username"] === $this->username) {
                 $this->error = "Már létezik felhasználó ilyen névvel.";
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     private function insertNewUser(): void {
