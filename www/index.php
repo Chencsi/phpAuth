@@ -1,15 +1,32 @@
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
+use App\User\Login;
+
+require __DIR__ . "/vendor/autoload.php";
 
 $whoops = new \Whoops\Run;
 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
 
-$request_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+session_start();
 
-if ($request_path === "/") {
-    if (!isset($_SESSION['login'])) {
+$request_path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+$token = isset($_SESSION["token"]) ? $_SESSION["token"] : null;
+
+if ($token !== null) {
+    $userFromToken = Login::getUserFromToken($token);
+    if ($userFromToken === false) {
+        session_unset();
+        if (in_array($request_path, ["/login", "/register"])) {
+            header("Location: /login");
+        }
+    } else {
+        if ($request_path !== "/dashboard") {
+            header("Location: /dashboard");
+        }
+    }
+} else {
+    if ($request_path === "/dashboard") {
         header("Location: /login");
     }
 }
