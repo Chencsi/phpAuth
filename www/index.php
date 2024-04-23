@@ -28,7 +28,15 @@ if ($token !== null && Login::getUserFromToken($token) === null) {
 
 if (!empty($posted_data)) {
     if (isset($_POST["logout"])) {
+        $users = json_decode(file_get_contents($dataPath), true);
+        foreach ($users as $key => $user) {
+            if ($user["token"] === $token) {
+                $users[$key]["token"] = "";
+            }
+        }
+        file_put_contents($dataPath, json_encode($users, JSON_PRETTY_PRINT));
         unset($_SESSION["token"]);
+        header("Location: /login");
     }
     switch ($request_path){
         case ("/login"):
