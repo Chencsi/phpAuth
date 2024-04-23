@@ -21,6 +21,11 @@ $request_path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 $token = isset($_SESSION["token"]) ? $_SESSION["token"] : null;
 $posted_data = $_POST;
 
+if ($token !== null && Login::getUserFromToken($token) === null) {
+    session_unset();
+    header("Location: /login");
+}
+
 if (!empty($posted_data)) {
     if (isset($_POST["logout"])) {
         unset($_SESSION["token"]);

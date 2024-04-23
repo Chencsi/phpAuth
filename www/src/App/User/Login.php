@@ -47,6 +47,7 @@ class Login
                 return $user;
             }
         }
+        session_unset();
         return null;
     }
 
