@@ -1,5 +1,8 @@
 <?php
 
+declare(strict_types=1);
+error_reporting(E_ALL);
+
 use App\User\Login;
 use App\User\Register;
 
@@ -76,8 +79,8 @@ if ($token !== null) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>index</title>
-    <link rel="stylesheet" href="/assets/styles/style-tailwind.css">
+    <title>Feladat</title>
+    <link rel="stylesheet" href="/styles/style-tailwind.css">
 </head>
 
 <body>

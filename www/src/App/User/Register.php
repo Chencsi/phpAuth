@@ -48,7 +48,11 @@ class Register {
     private function usernameExists(): bool {
         foreach($this->users as $user) {
             if ($user["username"] === $this->username) {
-                $this->error = "Már létezik felhasználó ilyen névvel.";
+                $this->error = "Ez a felhasználónév foglalt.";
+                return true;
+            }
+            if ($user["email"] === $this->email) {
+                $this->error = "Ez az E-mail cím foglalt..";
                 return true;
             }
         }
