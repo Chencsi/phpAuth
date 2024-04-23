@@ -2,6 +2,11 @@
 
 use App\User\Login;
 ?>
+<?php
+    if (isset($_SESSION["token"])) {
+        echo "token: " . $_SESSION["token"] ."<br>";
+    }
+?>
 <form action="" method="post">
 
     <label for="username">username:</label>

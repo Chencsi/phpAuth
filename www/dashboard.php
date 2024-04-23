@@ -1,7 +1,9 @@
 <?php
 
-if ($request_path === "/") {
-    if (!isset($_SESSION['token'])) {
-        header("Location: /login");
-    }
-}
+echo $_SESSION["token"];
+
+?>
+
+<form action="/" method="post">
+    <input type="submit" name="logout" value="Kijelentkezés">
+</form>

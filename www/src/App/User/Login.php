@@ -30,7 +30,7 @@ class Login
         if (
             $this->checkInputValues() &&
             $this->checkDataMatching() &&
-            $this->user["token"] === "" &&
+            $this->clearOldToken() &&
             $this->addTokenToUser() &&
             $this->saveUsers()
             ) {
@@ -46,6 +46,11 @@ class Login
             }
         }
         return false;
+    }
+
+    private function clearOldToken(): bool {
+        $this->user["token"] = "";
+        return true;
     }
 
     private function setSessionAndLogin(): void

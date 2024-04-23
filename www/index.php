@@ -11,6 +11,10 @@ $whoops->register();
 
 $dataPath = "data/data.json";
 
+session_start();
+// if (!isset($_SESSION["token"])) {
+// }
+
 if (!file_exists($dataPath)) {
     file_put_contents($dataPath, json_encode([]));
 }
@@ -19,17 +23,24 @@ $request_path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 $token = isset($_SESSION["token"]) ? $_SESSION["token"] : null;
 $posted_data = $_POST;
 
+// if (!empty($_POST)) {
+//     echo var_dump($_POST);
+// }
+
 if (!empty($posted_data)) {
+    if (isset($_POST["logout"])) {
+        unset($_SESSION["token"]);
+    }
     switch ($request_path){
         case ("/login"):
             $login = new Login($posted_data["username"], $posted_data["password"]);
+            header("Location: /dashboard");
             break;
         case ("/register"):
             $register = new Register($posted_data["username"], $posted_data["email"], $posted_data["password"]);
+            header("Location: /login");
             break;
     }
-} else {
-    session_start();
 }
 
 if ($token !== null) {
