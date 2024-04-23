@@ -45,7 +45,7 @@ class Register {
         return true;
     }
 
-    private function usernameExists(): bool {
+    private function validateDatas(): bool {
         foreach($this->users as $user) {
             if ($user["username"] === $this->username) {
                 $this->error = "Ez a felhasználónév már foglalt.";
@@ -55,12 +55,24 @@ class Register {
                 $this->error = "Ez az E-mail cím már foglalt.";
                 return true;
             }
+            if (strlen($this->password) < 6) {
+                $this->error = "A jelszónak legalább 6 karakter hosszúnak kell lennie.";
+                return true;
+            }
+            if (strlen($this->username) < 6) {
+                $this->error = "A felhasználónévnek legalább 6 karakter hosszúnak kell lennie.";
+                return true;
+            }
+            if (filter_var($user["email"], FILTER_VALIDATE_EMAIL)) {
+                $this->error = "Nem megfelelő E-mail cím formátum.";
+                return true;
+            }
         }
         return false;
     }
 
     private function insertNewUser(): void {
-        if (!$this->usernameExists()) {
+        if (!$this->validateDatas()) {
             array_push($this->users, $this->newUser);
             if (file_put_contents($this->data, json_encode($this->users, JSON_PRETTY_PRINT))) {
                 $this->success = "Sikeresen regisztráltál!";
