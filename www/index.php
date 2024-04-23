@@ -9,7 +9,11 @@ $whoops = new \Whoops\Run;
 $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 $whoops->register();
 
-session_start();
+$dataPath = "data/data.json";
+
+if (!file_exists($dataPath)) {
+    file_put_contents($dataPath, json_encode([]));
+}
 
 $request_path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 $token = isset($_SESSION["token"]) ? $_SESSION["token"] : null;
@@ -24,13 +28,15 @@ if (!empty($posted_data)) {
             $register = new Register($posted_data["username"], $posted_data["email"], $posted_data["password"]);
             break;
     }
+} else {
+    session_start();
 }
 
 if ($token !== null) {
     $userFromToken = Login::getUserFromToken($token);
     if ($userFromToken === false) {
-        session_unset();
         if (in_array($request_path, ["/login", "/register"])) {
+            session_destroy();
             header("Location: /login");
         }
     } else {

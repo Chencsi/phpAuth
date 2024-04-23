@@ -10,4 +10,11 @@
     <input type="password" name="password">
 
     <button type="submit">register</button>
+
+    <?php if (isset($register)): ?>
+        <p><?= $register->success ?></p>
+    <?php endif; ?>
+    <?php if (isset($register)): ?>
+        <p><?= $register->error ?></p>
+    <?php endif; ?>
 </form>

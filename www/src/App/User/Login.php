@@ -2,6 +2,8 @@
 
 namespace App\User;
 
+use Exception;
+
 class Login
 {
     private string $username;
@@ -49,16 +51,14 @@ class Login
     private function setSessionAndLogin(): void
     {
         $_SESSION['token'] = $this->token;
-        header("location: /dashboard");
     }
 
     private function addTokenToUser(): bool
     {
-
         $this->token = $this->generateToken();
-        foreach (self::$users as $user) {
+        foreach (self::$users as $key => $user) {
             if ($user["username"] === $this->user["username"]) {
-                $user["token"] = $this->token;
+                self::$users[$key]["token"] = $this->token;
             }
         }
         return true;
@@ -96,11 +96,12 @@ class Login
 
     private function saveUsers(): bool
     {
-        if (file_put_contents($this->data, json_encode(self::$users, JSON_PRETTY_PRINT))) {
+        try {
+            file_put_contents($this->data, json_encode(self::$users, JSON_PRETTY_PRINT));
             $this->success = "Sikeres bejelentkezés!";
             return true;
-        } else {
-            $this->error = "Valami hiba történt, próbáld úrja.";
+        } catch (Exception $e) {
+            $this->error = "Valami hiba történt, próbáld úrja. $e";
             return false;
         }
     }
