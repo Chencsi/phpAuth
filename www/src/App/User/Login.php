@@ -38,14 +38,16 @@ class Login
         }
     }
 
-    public static function getUserFromToken(string $token): object | bool
+    public static function getUserFromToken(string $token): ?array
     {
+        $data = __DIR__ . "/../../../data/data.json";
+        self::$users = json_decode(file_get_contents($data), true);
         foreach (self::$users as $user) {
             if ($user["token"] === $token) {
                 return $user;
             }
         }
-        return false;
+        return null;
     }
 
     private function clearOldToken(): bool {

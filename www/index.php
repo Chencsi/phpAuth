@@ -12,8 +12,6 @@ $whoops->register();
 $dataPath = "data/data.json";
 
 session_start();
-// if (!isset($_SESSION["token"])) {
-// }
 
 if (!file_exists($dataPath)) {
     file_put_contents($dataPath, json_encode([]));
@@ -22,10 +20,6 @@ if (!file_exists($dataPath)) {
 $request_path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 $token = isset($_SESSION["token"]) ? $_SESSION["token"] : null;
 $posted_data = $_POST;
-
-// if (!empty($_POST)) {
-//     echo var_dump($_POST);
-// }
 
 if (!empty($posted_data)) {
     if (isset($_POST["logout"])) {
@@ -56,7 +50,7 @@ if ($token !== null) {
         }
     }
 } else {
-    if ($request_path === "/dashboard") {
+    if (!in_array($request_path, ["/login", "/register"])) {
         header("Location: /login");
     }
 }
@@ -77,9 +71,6 @@ if ($token !== null) {
     <main>
         <?php
         switch ($request_path) {
-            case '/':
-                header('Location: /dashboard');
-                break;
             case '/dashboard':
                 require __DIR__ . '/dashboard.php';
                 break;
