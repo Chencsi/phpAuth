@@ -48,7 +48,9 @@ if (!empty($posted_data)) {
             break;
         case ("/register"):
             $register = new Register($posted_data["username"], $posted_data["email"], $posted_data["password"]);
-            header("Location: /login");
+            if ($register->error === ""){
+                header( "Refresh:2; url=/login", true, 303);
+            }
             break;
     }
 }
