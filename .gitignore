@@ -2,6 +2,5 @@
 logs/
 www/vendor/
 .DS_Store
-www/assets/styles/style-tailwind.css
 www/data/data.json
 .idea

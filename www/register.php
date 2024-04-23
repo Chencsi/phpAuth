@@ -1,20 +1,37 @@
-<form action="" method="post">
+<div class="max-w-[350px] px-14 py-14 bg-slate-500 block mx-auto drop-shadow sm:scale-125">
+    <form action="" method="post" class="flex flex-col gap-5">
 
-    <label for="username">username:</label>
-    <input type="text" name="username">
+        <h1 class="text-center font-extrabold text-3xl sm:text-4xl drop-shadow mb-3">Novin Auth</h1>
 
-    <label for="email">email:</label>
-    <input type="email" name="email">
+        <div class="flex flex-col gap-1">
+            <label for="username">Felhasználónév</label>
+            <input type="text" name="username" class="bg-slate-400 outline-none px-2 py-1">
+        </div>
 
-    <label for="password">password:</label>
-    <input type="password" name="password">
+        <div class="flex flex-col gap-1">
+            <label for="email">E-mail cím</label>
+            <input type="email" name="email" class="bg-slate-400 outline-none px-2 py-1">
+        </div>
 
-    <button type="submit">register</button>
+        <div class="flex flex-col gap-1">
+            <label for="password">Jelszó</label>
+            <input type="password" name="password" class="bg-slate-400 outline-none px-2 py-1">
+        </div>
 
-    <?php if (isset($register)): ?>
-        <p><?= $register->success ?></p>
-    <?php endif; ?>
-    <?php if (isset($register)): ?>
-        <p><?= $register->error ?></p>
-    <?php endif; ?>
-</form>
+        <div class="flex flex-row gap-3">
+            <button type="submit"
+                class="block w-full bg-blue-800 hover:bg-blue-900 transition duration-200">Regisztráció</button>
+            <a href="/login"
+                class="block w-full bg-slate-400 text-center py-1 hover:bg-slate-200 hover:text-slate-600 transition duration-200">Belépés</a>
+        </div>
+
+        <div>
+            <?php if (isset($register)): ?>
+                <p><?= $register->success ?></p>
+            <?php endif; ?>
+            <?php if (isset($register)): ?>
+                <p><?= $register->error ?></p>
+            <?php endif; ?>
+        </div>
+    </form>
+</div>

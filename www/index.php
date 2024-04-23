@@ -44,7 +44,9 @@ if (!empty($posted_data)) {
     switch ($request_path){
         case ("/login"):
             $login = new Login($posted_data["username"], $posted_data["password"]);
-            header("Location: /dashboard");
+            if ($login->error === ""){
+                header( "Refresh:2; url=/dashboard", true, 303);
+            }
             break;
         case ("/register"):
             $register = new Register($posted_data["username"], $posted_data["email"], $posted_data["password"]);
@@ -85,8 +87,8 @@ if ($token !== null) {
     <link rel="stylesheet" href="/styles/style-tailwind.css">
 </head>
 
-<body>
-    <main>
+<body class="bg-slate-700 text-white">
+    <main class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <?php
         switch ($request_path) {
             case '/dashboard':
